@@ -1,0 +1,9 @@
+.form__search{
+    margin-right: 30px;
+}
+
+.img__carrusel{
+    max-height: 90vh;
+    object-fit: cover;
+    object-position: center;
+}
