@@ -1,8 +1,10 @@
 package com.gamescore.model;
 
 import com.gamescore.domain.Videogame;
+import com.gamescore.domain.VideogameAcquired;
 import com.gamescore.util.Conexion;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -33,7 +35,7 @@ public class VideoGameModel {
     }
 
     public Videogame findById(Videogame videogame){
-
+        System.out.println("videogame = " + videogame);
         Document document = new Document();
         document.put("_id", videogame.get_id());
 

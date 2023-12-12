@@ -9,7 +9,7 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="${pageContext.request.contextPath}/FrontController?path=Home" class="nav-link px-2 text-white active">Inicio</a></li>
                 <li><a href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Listar" class="nav-link px-2 text-white">Tienda</a></li>
-                <li><a href="" class="nav-link px-2 text-white">Perfil</a></li>
+                <li><a href="${pageContext.request.contextPath}/FrontController?path=User&action=Profile" class="nav-link px-2 text-white">Perfil</a></li>
                 <li><a href="${pageContext.request.contextPath}/FrontController?path=Trolley&action=Listar" class="nav-link px-2 text-white">Carrito (<span class="text-danger">${countTrolley}</span>) </a></li>
             </ul>
             <%if (session.getAttribute("user") == null) { %>

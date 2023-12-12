@@ -1,11 +1,15 @@
 package com.gamescore.controller;
 
 import com.gamescore.domain.User;
+import com.gamescore.domain.Videogame;
 import com.gamescore.domain.VideogameAcquired;
 import com.gamescore.model.UserModel;
+import com.gamescore.model.VideoGameModel;
 import org.bson.types.ObjectId;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +23,36 @@ import java.util.Arrays;
 public class UserController extends HttpServlet {
 
     private final UserModel userModel = new UserModel();
+    private final VideoGameModel videoGameModel = new VideoGameModel();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response){
+        String accion = request.getParameter("action");
+        switch (accion){
+            case "Profile":
+                verPerfil(request, response);
+                break;
+        }
+    }
 
+    private void verPerfil(HttpServletRequest request, HttpServletResponse response) {
+        User user = (User) request.getSession().getAttribute("user");
+        VideogameAcquired videogameAcquired [] = user.getVideogameAcquired();
+
+        ArrayList<Videogame> videogames = new ArrayList<>();
+        for(VideogameAcquired v : videogameAcquired){
+            System.out.println(v.getVideogame_id());
+            videogames.add(videoGameModel.findById(new Videogame(v.getVideogame_id())));
+        }
+
+        try {
+            request.setAttribute("library", videogames);
+            request.getRequestDispatcher("/assets/views/ProfileView.jsp").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace(System.out);
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     @Override
@@ -40,29 +70,37 @@ public class UserController extends HttpServlet {
         String accion = request.getParameter("action");
         switch (accion){
             case "TerminarCompra":
-                comprarCarrito(request, response);
+                try {
+                    comprarCarrito(request, response);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
         }
     }
 
-    private void comprarCarrito(HttpServletRequest request, HttpServletResponse response) {
+    private void comprarCarrito(HttpServletRequest request, HttpServletResponse response) throws ParseException {
         JSONObject respuesta = new JSONObject();
 
         ArrayList<ObjectId> trolley = (ArrayList<ObjectId>) request.getSession().getAttribute("deseos");
+        ArrayList<ObjectId> videogames = (ArrayList<ObjectId>) request.getSession().getAttribute("trolley");
         User user = (User) request.getSession().getAttribute("user");
 
         VideogameAcquired videogameAcquired[] = new VideogameAcquired[trolley.size()];
         for (int i = 0; i < trolley.size(); i++) {
+            System.out.println(trolley.get(i).toString());
             videogameAcquired[i] = new VideogameAcquired(trolley.get(i), LocalDate.now());
         }
 
-
         User bd = userModel.buyVideoGames(user, videogameAcquired);
         request.getSession().setAttribute("user", bd);
-        request.getSession().setAttribute("count", 0);
+        request.getSession().setAttribute("countTrolley", 0);
+        videogames.clear();
+        trolley.clear();
 
         respuesta.put("message", "Añadido al carrito");
         respuesta.put("url", request.getContextPath() + "/FrontController?path=VideoGame&action=Listar");
+
 
         enviarRespuesta(response, respuesta);
     }
