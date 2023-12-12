@@ -52,7 +52,6 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String accion = request.getParameter("action");
-        System.out.println("Anda aqui");
         switch (accion) {
             case "Register":
                 register(request, response);

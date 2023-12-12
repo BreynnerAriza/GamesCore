@@ -71,7 +71,7 @@
                 <td class="text-center">Total</td>
                 <td class="text-center">${total}</td>
                 <td colspan="2" class="text-center">
-                    <button type="button" class="btn btn-primary">Terminar compra</button>
+                    <button type="button" class="btn btn-primary" onclick="user.comprarCarrito()">Terminar compra</button>
                 </td>
             </tr>
             </tfoot>
@@ -85,6 +85,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/TrolleyJs.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/UserJs.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/UtilsJs.js"></script>
 <script src="${pageContext.request.contextPath}/assets/plugins/jquery/jquery-3.7.1.js"></script>
 <script src="${pageContext.request.contextPath}/assets/plugins/toastr/toastr.min.js"></script>

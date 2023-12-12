@@ -9,6 +9,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class AuthModel {
 
@@ -27,9 +28,10 @@ public class AuthModel {
         //Crear la consulta
         Document userLogin = collection.find(Filters.and(userDocument)).first();
 
-        if (userLogin != null)
+        if (userLogin != null) {
             userBd = gson.fromJson(userLogin.toJson(), User.class);
-
+            userBd.set_id(new ObjectId(userLogin.get("_id").toString()));
+        }
         return userBd; //Retornar lo encontrado
     }
 

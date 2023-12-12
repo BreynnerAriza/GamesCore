@@ -39,6 +39,7 @@ public class TrolleyController extends HttpServlet {
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().setAttribute("count", trolley.size());
         request.getSession().setAttribute("trolley", videogames);
+        request.getSession().setAttribute("deseos",trolley);
         try {
 
             request.getRequestDispatcher("/assets/views/TrolleyView.jsp").forward(request, response);

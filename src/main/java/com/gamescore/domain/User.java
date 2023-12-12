@@ -13,7 +13,7 @@ public class User {
     private String password;
     private Boolean state = Boolean.TRUE;
 
-    private List<VideogameAcquired> videogameAcquired;
+    private VideogameAcquired  videogameAcquired [];
 
     //Constructores
     public User() {
@@ -32,6 +32,23 @@ public class User {
         this.nick = nick;
         this.email = email;
         this.password = password;
+    }
+
+    public User(ObjectId _id, String nick, String email, String password, Boolean state) {
+        this._id = _id;
+        this.nick = nick;
+        this.email = email;
+        this.password = password;
+        this.state = state;
+    }
+
+    public User(ObjectId _id, String nick, String email, String password, Boolean state, VideogameAcquired[] videogameAcquired) {
+        this._id = _id;
+        this.nick = nick;
+        this.email = email;
+        this.password = password;
+        this.state = state;
+        this.videogameAcquired = videogameAcquired;
     }
 
     @Override
@@ -83,5 +100,13 @@ public class User {
 
     public void setState(Boolean state) {
         this.state = state;
+    }
+
+    public VideogameAcquired[] getVideogameAcquired() {
+        return videogameAcquired;
+    }
+
+    public void setVideogameAcquired(VideogameAcquired[] videogameAcquired) {
+        this.videogameAcquired = videogameAcquired;
     }
 }
