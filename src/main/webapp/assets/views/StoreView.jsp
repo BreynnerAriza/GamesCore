@@ -75,11 +75,11 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Listar&n=1">1</a></li>
+                    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Listar&n=2">2</a></li>
+                    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Listar&n=3">3</a></li>
+                    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Listar&n=4">4</a></li>
+                    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Listar&n=5">5</a></li>
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>

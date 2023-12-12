@@ -67,10 +67,12 @@ public class VideoGameController extends HttpServlet {
     }
 
 
-
-
     private void listar(HttpServletRequest request, HttpServletResponse response) {
-        ArrayList<Videogame> videogames = videoGameModel.find(0, 12);
+        String n = request.getParameter("n");
+        int indice = (n==null) ? 1 : Integer.parseInt(n);
+
+        ArrayList<Videogame> videogames = videoGameModel.find(12 * (indice - 1), 12 * indice);
+
         try{
             request.setAttribute("videogames", videogames);
             request.getRequestDispatcher("/assets/views/StoreView.jsp").forward(request, response);
@@ -81,10 +83,6 @@ public class VideoGameController extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response){
-
-    }
 
     private void enviarRespuesta(HttpServletResponse response, JSONObject respuesta){
         try {

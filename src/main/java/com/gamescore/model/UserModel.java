@@ -29,16 +29,16 @@ public class UserModel {
     private final Gson gson = new Gson();
 
     public User findById(User user) {
-        System.out.println("a");
         Document filter = new Document("_id", user.get_id());
+
         Document documentBd = collection.find(filter).first();
         User bd = gson.fromJson(documentBd.toJson(), User.class);
+
         bd.set_id(user.get_id());
-        System.out.println("bd = " + bd);
         return bd;
     }
 
-    public User buyVideoGames(User user, VideogameAcquired videogameAcquired []) throws ParseException {
+    public User buyVideoGames(User user, VideogameAcquired videogameAcquired []) {
 
         Document filter = new Document("_id", user.get_id());
         Document bdDocument = collection.find(filter).first();
@@ -53,7 +53,13 @@ public class UserModel {
             String bdList = bdDocument.toJson();
 
             JSONParser parser = new JSONParser();
-            JSONObject j = (JSONObject) parser.parse(bdList);
+            JSONObject j = null;
+
+            try {
+                j = (JSONObject) parser.parse(bdList);
+            } catch (ParseException e) {
+                e.printStackTrace(System.out);
+            }
 
             // Crear un objeto JsonObject a partir del JSON de entrada
             JsonObject jsonObject = JsonParser.parseString(j.toJSONString()).getAsJsonObject();
@@ -71,7 +77,6 @@ public class UserModel {
                 // Crear un BsonObjectId a partir del String
                 b[i] = new VideogameAcquired(new ObjectId(objectIdAsString));
             }
-
 
             int userL = user.getVideogameAcquired().length;
             int bdL = user.getVideogameAcquired().length;

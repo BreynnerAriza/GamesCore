@@ -26,9 +26,9 @@ public class UserController extends HttpServlet {
     private final VideoGameModel videoGameModel = new VideoGameModel();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response){
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String accion = request.getParameter("action");
-        switch (accion){
+        switch (accion) {
             case "Profile":
                 verPerfil(request, response);
                 break;
@@ -37,13 +37,13 @@ public class UserController extends HttpServlet {
 
     private void verPerfil(HttpServletRequest request, HttpServletResponse response) {
         Object u = request.getSession().getAttribute("user");
-        if(u != null){
+        if (u != null) {
+
             User user = (User) request.getSession().getAttribute("user");
-            System.out.println("user = " + user);
-            VideogameAcquired videogameAcquired [] = user.getVideogameAcquired();
+            VideogameAcquired videogameAcquired[] = user.getVideogameAcquired();
 
             ArrayList<Videogame> videogames = new ArrayList<>();
-            for(VideogameAcquired v : videogameAcquired){
+            for (VideogameAcquired v : videogameAcquired) {
                 System.out.println(v.getVideogame_id());
                 videogames.add(videoGameModel.findById(new Videogame(v.getVideogame_id())));
             }
@@ -56,7 +56,7 @@ public class UserController extends HttpServlet {
             } catch (IOException e) {
                 e.printStackTrace(System.out);
             }
-        }else{
+        } else {
             try {
                 request.getRequestDispatcher("/assets/views/LoginView.jsp").forward(request, response);
             } catch (ServletException e) {
@@ -65,38 +65,24 @@ public class UserController extends HttpServlet {
                 e.printStackTrace(System.out);
             }
         }
-
-
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response){
-
-    }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response){
-
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response){
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) {
         String accion = request.getParameter("action");
-        switch (accion){
+        switch (accion) {
             case "TerminarCompra":
-                try {
-                    comprarCarrito(request, response);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                comprarCarrito(request, response);
                 break;
         }
     }
 
-    private void comprarCarrito(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+    private void comprarCarrito(HttpServletRequest request, HttpServletResponse response) {
         Object u = request.getSession().getAttribute("user");
         JSONObject respuesta = new JSONObject();
-        if(u != null){
+        if (u != null) {
+
             ArrayList<ObjectId> trolley = (ArrayList<ObjectId>) request.getSession().getAttribute("deseos");
             ArrayList<ObjectId> videogames = (ArrayList<ObjectId>) request.getSession().getAttribute("trolley");
             User user = (User) request.getSession().getAttribute("user");
@@ -116,9 +102,8 @@ public class UserController extends HttpServlet {
             respuesta.put("message", "Añadido al carrito");
             respuesta.put("url", request.getContextPath() + "/FrontController?path=VideoGame&action=Listar");
 
-
             enviarRespuesta(response, respuesta);
-        }else{
+        } else {
             respuesta.put("message", "Login necesario");
             respuesta.put("url", request.getContextPath() + "/FrontController?path=Auth&action=Login");
         }
@@ -126,7 +111,7 @@ public class UserController extends HttpServlet {
     }
 
 
-    private void enviarRespuesta(HttpServletResponse response, JSONObject respuesta){
+    private void enviarRespuesta(HttpServletResponse response, JSONObject respuesta) {
         try {
             response.setContentType("application/json");
             response.getWriter().print(respuesta.toJSONString());
