@@ -2,6 +2,7 @@ package com.gamescore.controller;
 
 import com.gamescore.domain.Videogame;
 import com.gamescore.model.VideoGameModel;
+import org.bson.types.ObjectId;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,13 +24,31 @@ public class VideoGameController extends HttpServlet {
             case "Listar":
                 listar(request, response);
                 break;
+            case "Mostrar":
+                mostrar(request, response);
+                break;
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response){
+    private void mostrar(HttpServletRequest request, HttpServletResponse response) {
+
+        Object id = request.getParameter("VideoGameReq");
+
+        Videogame videoGameReq = new Videogame(new ObjectId(id.toString()));
+        Videogame videogameBd = videoGameModel.findById(videoGameReq);
+
+        try {
+            request.setAttribute("videoGame", videogameBd);
+            request.getRequestDispatcher("/assets/views/VideoGameView.jsp").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace(System.out);
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        }
 
     }
+
+
 
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
@@ -42,6 +61,11 @@ public class VideoGameController extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace(System.out);
         }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response){
+
     }
 
 }

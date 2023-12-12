@@ -87,7 +87,6 @@ public class AuthController extends HttpServlet {
             User userBd = authModel.login(user);
             if (userBd != null) {
                 request.getSession().setAttribute("user", userBd);
-
                 respuesta.put("message", "Bienvenido " + userBd.getNick());
                 respuesta.put("url", request.getContextPath() + "/index.jsp");
             }else{

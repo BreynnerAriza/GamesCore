@@ -8,6 +8,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
@@ -25,15 +26,22 @@ public class VideoGameModel {
         FindIterable<Document> videogamesDocument = collection.find().skip(inicio).limit(ultimo);
         for(Document videogame : videogamesDocument){
             Videogame videogameO = gson.fromJson(videogame.toJson(), Videogame.class);
+            videogameO.set_id(new ObjectId(videogame.get("_id").toString()));
             videogames.add(videogameO);
         }
         return videogames;
     }
 
     public Videogame findById(Videogame videogame){
-        Document document = Document.parse(gson.toJson(videogame));
-        Document videogameBd = collection.find(document).first();
-        return videogame == null ? null : gson.fromJson(videogameBd.toJson(), Videogame.class);
+
+        Document document = new Document();
+        document.put("_id", videogame.get_id());
+
+        Document videogameDoc = collection.find(document).first();
+        Videogame videogameBd = gson.fromJson(videogameDoc.toJson(), Videogame.class);
+        videogameBd.set_id(new ObjectId(videogameDoc.get("_id").toString()));
+
+        return videogameBd;
     }
 
 }

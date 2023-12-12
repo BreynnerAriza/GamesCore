@@ -1,3 +1,5 @@
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -65,5 +67,5 @@
     <script src="${pageContext.request.contextPath}/assets/plugins/jquery/jquery-3.7.1.js"></script>
     <script src="${pageContext.request.contextPath}/assets/plugins/toastr/toastr.min.js"></script>
     <script src="${pageContext.request.contextPath}/assets/plugins/toastr/toastr.js"></script>
-
+</body>
 </html>

@@ -25,10 +25,20 @@ public class FrontController extends HttpServlet {
         forward(request,response);
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        forward(request,response);
+    }
+
     private void forward(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String path = request.getParameter("path");
         if(path != null)
-            request.getRequestDispatcher("/"+path + "Controller").forward(request,response);
+            if(path.equals("Home")){
+                request.getRequestDispatcher("index.jsp").forward(request,response);
+            }else {
+                request.getRequestDispatcher("/"+path + "Controller").forward(request,response);
+            }
+
     }
 
 }
