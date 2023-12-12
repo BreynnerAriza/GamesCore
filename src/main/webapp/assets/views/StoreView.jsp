@@ -31,8 +31,9 @@
                      height="auto" class="d-inline-block align-text-top navbar-brand">
             </a>
             <div class="col-md-3 text-end">
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                <form method="GET" id="searchV" name="searchV" action="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Buscar" class="d-flex" role="search">
+                    <input class="form-control me-2" name="name" id="name" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="button" onclick="videoGame.buscar()" >Buscar</button>
                 </form>
             </div>
         </nav>
@@ -52,7 +53,9 @@
                                     <p class="mb-0">${videogameL.description[0]}</p>
                                     <p class="mb-0 text-success">$${videogameL.price}</p>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <a class="btn btn-info me-md-2" type="button" href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Mostrar&VideoGameReq=${videogameL._id}">Ver mas <i class="bi bi-eye"></i></a>
+                                        <a class="btn btn-info me-md-2" type="button"
+                                           href="${pageContext.request.contextPath}/FrontController?path=VideoGame&action=Mostrar&VideoGameReq=${videogameL._id}">Ver
+                                            mas <i class="bi bi-eye"></i></a>
                                         <button onclick="trolley.agregar('${videogameL._id}')" class="btn btn-warning"
                                                 type="button">Añadir<i
                                                 class="bi bi-basket2 ms-2"></i></button>
@@ -93,6 +96,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/TrolleyJs.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/VideoGameJs.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/UtilsJs.js"></script>
 <script src="${pageContext.request.contextPath}/assets/plugins/jquery/jquery-3.7.1.js"></script>
 <script src="${pageContext.request.contextPath}/assets/plugins/toastr/toastr.min.js"></script>

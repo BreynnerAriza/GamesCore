@@ -46,4 +46,21 @@ public class VideoGameModel {
         return videogameBd;
     }
 
+
+    public ArrayList<Videogame> findByName(Videogame videogame) {
+
+        ArrayList<Videogame> videogames = new ArrayList<>();
+
+        String nombre = videogame.getName();
+        Document regexQuery = new Document("name", new Document("$regex", ".*" + nombre + ".*").append("$options", "i"));
+        // Realizar la consulta y obtener los resultados
+        for (Document document : collection.find(regexQuery)) {
+            Videogame videogameO = gson.fromJson(document.toJson(), Videogame.class);
+            videogameO.set_id(new ObjectId(document.get("_id").toString()));
+            videogames.add(videogameO);
+        }
+
+        // Cerrar la conexión
+        return videogames;
+    }
 }

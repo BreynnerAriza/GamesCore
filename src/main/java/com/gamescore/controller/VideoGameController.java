@@ -3,6 +3,7 @@ package com.gamescore.controller;
 import com.gamescore.domain.Videogame;
 import com.gamescore.model.VideoGameModel;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +28,23 @@ public class VideoGameController extends HttpServlet {
             case "Mostrar":
                 mostrar(request, response);
                 break;
+            case "Buscar":
+                buscar(request, response);
+                break;
+        }
+    }
+
+    private void buscar(HttpServletRequest request, HttpServletResponse response) {
+        JSONObject respuesta = new JSONObject();
+        String nombre = request.getParameter("name");
+        ArrayList<Videogame> videogames = videoGameModel.findByName(new Videogame(nombre));
+        try{
+            request.setAttribute("videogames", videogames);
+            request.getRequestDispatcher("/assets/views/StoreView.jsp").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace(System.out);
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
         }
     }
 
@@ -66,6 +84,15 @@ public class VideoGameController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response){
 
+    }
+
+    private void enviarRespuesta(HttpServletResponse response, JSONObject respuesta){
+        try {
+            response.setContentType("application/json");
+            response.getWriter().print(respuesta.toJSONString());
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
 }

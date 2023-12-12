@@ -1,7 +1,6 @@
 class User {
 
     comprarCarrito() {
-        alert("comprando")
         fetch("http://localhost:8080/GamesCore/FrontController?path=User&action=TerminarCompra", {
             method: "PUT",
         }).then((response) => response.json()).

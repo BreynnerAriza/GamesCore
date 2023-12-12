@@ -28,6 +28,10 @@ public class Videogame {
         this._id = _id;
     }
 
+    public Videogame(String name) {
+        this.name = name;
+    }
+
     public Videogame(String name, String description [], double price, String video, String[] categories, String[] stores, String[] images) {
         this.name = name;
         this.description = description;

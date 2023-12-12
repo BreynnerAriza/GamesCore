@@ -36,23 +36,37 @@ public class UserController extends HttpServlet {
     }
 
     private void verPerfil(HttpServletRequest request, HttpServletResponse response) {
-        User user = (User) request.getSession().getAttribute("user");
-        VideogameAcquired videogameAcquired [] = user.getVideogameAcquired();
+        Object u = request.getSession().getAttribute("user");
+        if(u != null){
+            User user = (User) request.getSession().getAttribute("user");
+            System.out.println("user = " + user);
+            VideogameAcquired videogameAcquired [] = user.getVideogameAcquired();
 
-        ArrayList<Videogame> videogames = new ArrayList<>();
-        for(VideogameAcquired v : videogameAcquired){
-            System.out.println(v.getVideogame_id());
-            videogames.add(videoGameModel.findById(new Videogame(v.getVideogame_id())));
+            ArrayList<Videogame> videogames = new ArrayList<>();
+            for(VideogameAcquired v : videogameAcquired){
+                System.out.println(v.getVideogame_id());
+                videogames.add(videoGameModel.findById(new Videogame(v.getVideogame_id())));
+            }
+
+            try {
+                request.setAttribute("library", videogames);
+                request.getRequestDispatcher("/assets/views/ProfileView.jsp").forward(request, response);
+            } catch (ServletException e) {
+                e.printStackTrace(System.out);
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
+        }else{
+            try {
+                request.getRequestDispatcher("/assets/views/LoginView.jsp").forward(request, response);
+            } catch (ServletException e) {
+                e.printStackTrace(System.out);
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
         }
 
-        try {
-            request.setAttribute("library", videogames);
-            request.getRequestDispatcher("/assets/views/ProfileView.jsp").forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace(System.out);
-        } catch (IOException e) {
-            e.printStackTrace(System.out);
-        }
+
     }
 
     @Override
@@ -80,28 +94,34 @@ public class UserController extends HttpServlet {
     }
 
     private void comprarCarrito(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        Object u = request.getSession().getAttribute("user");
         JSONObject respuesta = new JSONObject();
+        if(u != null){
+            ArrayList<ObjectId> trolley = (ArrayList<ObjectId>) request.getSession().getAttribute("deseos");
+            ArrayList<ObjectId> videogames = (ArrayList<ObjectId>) request.getSession().getAttribute("trolley");
+            User user = (User) request.getSession().getAttribute("user");
 
-        ArrayList<ObjectId> trolley = (ArrayList<ObjectId>) request.getSession().getAttribute("deseos");
-        ArrayList<ObjectId> videogames = (ArrayList<ObjectId>) request.getSession().getAttribute("trolley");
-        User user = (User) request.getSession().getAttribute("user");
+            VideogameAcquired videogameAcquired[] = new VideogameAcquired[trolley.size()];
+            for (int i = 0; i < trolley.size(); i++) {
+                System.out.println(trolley.get(i).toString());
+                videogameAcquired[i] = new VideogameAcquired(trolley.get(i), LocalDate.now());
+            }
 
-        VideogameAcquired videogameAcquired[] = new VideogameAcquired[trolley.size()];
-        for (int i = 0; i < trolley.size(); i++) {
-            System.out.println(trolley.get(i).toString());
-            videogameAcquired[i] = new VideogameAcquired(trolley.get(i), LocalDate.now());
+            User bd = userModel.buyVideoGames(user, videogameAcquired);
+            request.getSession().setAttribute("user", bd);
+            request.getSession().setAttribute("countTrolley", 0);
+            videogames.clear();
+            trolley.clear();
+
+            respuesta.put("message", "Añadido al carrito");
+            respuesta.put("url", request.getContextPath() + "/FrontController?path=VideoGame&action=Listar");
+
+
+            enviarRespuesta(response, respuesta);
+        }else{
+            respuesta.put("message", "Login necesario");
+            respuesta.put("url", request.getContextPath() + "/FrontController?path=Auth&action=Login");
         }
-
-        User bd = userModel.buyVideoGames(user, videogameAcquired);
-        request.getSession().setAttribute("user", bd);
-        request.getSession().setAttribute("countTrolley", 0);
-        videogames.clear();
-        trolley.clear();
-
-        respuesta.put("message", "Añadido al carrito");
-        respuesta.put("url", request.getContextPath() + "/FrontController?path=VideoGame&action=Listar");
-
-
         enviarRespuesta(response, respuesta);
     }
 

@@ -51,7 +51,6 @@ public class TrolleyController extends HttpServlet {
     }
 
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String accion = request.getParameter("action");
